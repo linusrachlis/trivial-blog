@@ -35,7 +35,7 @@ require_once __DIR__ . '/../bootstrap.php';
         ?>
         <article>
             <h3><?= htmlspecialchars($post->subject) ?></h3>
-            <p><?= $post->posted_at ?></p>
+            <p class="timestamp"><?= $post->posted_at ?></p>
             <p><?= htmlspecialchars($post->body) ?></p>
         </article>
         <?php

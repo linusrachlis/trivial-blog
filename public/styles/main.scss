@@ -10,6 +10,7 @@ form {
     border: 1px dashed olive;
     display: inline-block;
     padding: 1em;
+    border-radius: 1em;
 
     label {
         margin: 1em 0;
@@ -33,8 +34,10 @@ form {
 article {
     margin: 0 1em 1em 0;
     background-color: darkseagreen;
-    color: darkslateblue;
+    color: darkred;
     display: inline-block;
     padding: 1em;
     border-radius: 1em;
+
+    .timestamp { font-size: 80%; }
 }
