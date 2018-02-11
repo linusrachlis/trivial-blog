@@ -19,12 +19,13 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
         header("Location: /");
         ob_end_clean();
         exit;
+    } else {
+        header('HTTP/1.1 400 Bad Request');
     }
 }
 
-$uuid = uniqid('post-form-');
 ?>
-    <form method="post" id="<?= $uuid ?>">
+    <form method="post" id="post-form">
         <label>
             Subject<br>
             <?= Html::textInput($fieldset->subject) ?>
@@ -36,16 +37,29 @@ $uuid = uniqid('post-form-');
         <button type="submit">Create</button>
     </form>
 <?php
-
-/*
-<script>
-document.addEventListener('DOMContentLoaded', e => {
-    // noinspection JSAnnotator
-    const uuid = <?= json_encode($uuid) ?>;
-    const form = document.querySelector('#' + uuid);
-    form.addEventListener('submit', e => {
-
-    });
-});
-</script>
-*/
+if ('POST' != $_SERVER['REQUEST_METHOD']) {
+    ?>
+    <script>
+        $(($) => {
+            $(document).on('submit', '#post-form', function (e) {
+                const $form = $(this);
+                $.post('/actions/post-form.php', $form.serialize())
+                    .done(() => {
+                        window.location.reload();
+                    })
+                    .fail((xhr, textStatus, errorThrown) => {
+                        switch (xhr.status) {
+                            case 400:
+                                $form.replaceWith(xhr.responseText);
+                                break;
+                            default:
+                                alert("Sorry, the request broke");
+                        }
+                    });
+                e.preventDefault();
+                return false;
+            });
+        });
+    </script>
+    <?php
+}
