@@ -1,0 +1,40 @@
+body {
+    padding: 1em;
+    background-color: darkolivegreen;
+    color: cornsilk;
+    font-family: sans-serif;
+}
+
+form {
+    background-color: olivedrab;
+    border: 1px dashed olive;
+    display: inline-block;
+    padding: 1em;
+
+    label {
+        margin: 1em 0;
+        display: block;
+    }
+
+    input, textarea, select, button {
+        font-size: 1em;
+        font-family: inherit;
+    }
+
+    button {
+        background-color: saddlebrown;
+        color: white;
+        border-style: none;
+        border-radius: .5em;
+        padding: .5em;
+    }
+}
+
+article {
+    margin: 0 1em 1em 0;
+    background-color: darkseagreen;
+    color: darkslateblue;
+    display: inline-block;
+    padding: 1em;
+    border-radius: 1em;
+}
