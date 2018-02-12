@@ -1,6 +1,7 @@
 <?php
 
 use app\Post;
+use lib\Util;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -12,9 +13,6 @@ require_once __DIR__ . '/../bootstrap.php';
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/styles/main.css">
     <title>Excuse me while I blog</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
@@ -24,23 +22,18 @@ require_once __DIR__ . '/../bootstrap.php';
     <h2>New post</h2>
 
     <?php
-    require __DIR__ . '/actions/post-form.php';
+    (require __DIR__ . '/../actions/posts/create-form.php')();
     ?>
 
     <h2>Past posts</h2>
 
     <?php
-    $posts = Post::list();
-    foreach ($posts as $post) {
-        ?>
-        <article>
-            <h3><?= htmlspecialchars($post->subject) ?></h3>
-            <p class="timestamp"><?= $post->posted_at ?></p>
-            <p><?= htmlspecialchars($post->body) ?></p>
-        </article>
-        <?php
-    }
+    (require __DIR__ . '/../actions/posts/list.php')();
     ?>
 </main>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="/scripts/ajax.js"></script>
 </body>
 </html>

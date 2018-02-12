@@ -15,7 +15,7 @@ class Post
     public static function list(): array
     {
         $pdo = env()->pdo();
-        $query = $pdo->query("SELECT * FROM `post` ORDER BY `posted_at` DESC LIMIT 5");
+        $query = $pdo->query("SELECT * FROM `post` ORDER BY `posted_at` DESC");
         $query->setFetchMode(\PDO::FETCH_CLASS, self::class);
         return $query->fetchAll();
     }
@@ -31,6 +31,15 @@ class Post
                 ':subject' => $subject,
                 ':body' => $body,
             ]);
+    }
+
+    public static function delete($id): int
+    {
+        $pdo = env()->pdo();
+        $stmt = $pdo->prepare(
+            "DELETE FROM `post` WHERE `id` = :id LIMIT 1");
+        $stmt->execute([':id' => $id]);
+        return $stmt->rowCount();
     }
 
 }

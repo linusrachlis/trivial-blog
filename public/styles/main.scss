@@ -5,6 +5,14 @@ body {
     font-family: sans-serif;
 }
 
+button {
+    background-color: saddlebrown;
+    color: white;
+    border-style: none;
+    border-radius: .5em;
+    padding: .5em;
+}
+
 form {
     background-color: olivedrab;
     border: 1px dashed olive;
@@ -20,14 +28,6 @@ form {
     input, textarea, select, button {
         font-size: 1em;
         font-family: inherit;
-    }
-
-    button {
-        background-color: saddlebrown;
-        color: white;
-        border-style: none;
-        border-radius: .5em;
-        padding: .5em;
     }
 }
 

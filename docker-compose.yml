@@ -8,7 +8,7 @@ services:
       - 8080:8080
     environment:
       - APP_ENV=development
-    restart: 'no'
+    restart: unless-stopped
   db:
     ports:
       - 3306:3306
@@ -18,4 +18,4 @@ services:
       - MYSQL_USER=blog
       - MYSQL_PASSWORD=pass
       - MYSQL_ROOT_PASSWORD=root
-    restart: 'no'
+    restart: unless-stopped
