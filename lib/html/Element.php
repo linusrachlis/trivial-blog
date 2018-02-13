@@ -28,6 +28,11 @@ class Element
      * @var string
      */
     public $contents;
+    /**
+     * Data attributes
+     * @var array
+     */
+    public $data = [];
     private $name;
     /**
      * @var self[]
@@ -94,7 +99,13 @@ class Element
     public function render(): string
     {
         $result = "<$this->name";
-        foreach ($this->attributes as $attributeName => $attributeValue) {
+        $attributesToRender = $this->attributes;
+        foreach ($this->data as $dataKey => $dataValue) {
+            $attributesToRender["data-$dataKey"] = is_array($dataValue) ?
+                json_encode($dataValue) :
+                $dataValue;
+        }
+        foreach ($attributesToRender as $attributeName => $attributeValue) {
             $result .= " $attributeName=\"" . htmlspecialchars($attributeValue) . '"';
         }
         $result .= '>';

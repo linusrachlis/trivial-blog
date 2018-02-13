@@ -1,39 +1,26 @@
 <?php
 
-use app\Post;
-use lib\Util;
+use app\actions\Index;
+use lib\Action;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/styles/main.css">
-    <title>Excuse me while I blog</title>
-</head>
-<body>
-<header>
-    <h1>Excuse me while I blog</h1>
-</header>
-<main>
-    <h2>New post</h2>
+$actionClass = empty($_GET['action']) ? Index::class : $_GET['action'];
 
-    <?php
-    (require __DIR__ . '/../actions/posts/create-form.php')();
-    ?>
+if (
+    // Make sure requested action exists...
+    !class_exists($actionClass) ||
+    // ... is an 'Action' ...
+    !in_array(Action::class, class_implements($actionClass)) ||
+    // ... and is found in the expected Actions namespace.
+    0 !== strpos($actionClass, 'app\\actions\\')
+) {
+    // Should make a NotFound action for this purpose
+    header('HTTP/1.1 404 Not Found');
+    exit("Action class not found: " . var_export($actionClass, true));
+}
 
-    <h2>Past posts</h2>
+$method = strtolower($_SERVER['REQUEST_METHOD']);
 
-    <?php
-    (require __DIR__ . '/../actions/posts/list.php')();
-    ?>
-</main>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-<script src="/scripts/ajax.js"></script>
-</body>
-</html>
+/** @var Action $actionClass */
+$actionClass::$method();

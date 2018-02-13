@@ -2,23 +2,11 @@ $(($) => {
     $(document).on('submit', 'form.ajax-form', function (e) {
         const $form = $(this);
         const data = $form.data();
-        $.post(data.actionUrl, $form.serialize())
-            .done(() => {
-                if (data.refresh) {
-                    ajaxRefresh(data.refresh);
-                } else {
-                    alert("Done but nothing to refresh");
-                }
-            })
-            .fail((xhr) => {
-                switch (xhr.status) {
-                    case 400:
-                        $form.replaceWith(xhr.responseText);
-                        break;
-                    default:
-                        alert("Sorry, the request broke");
-                }
-            });
+
+        ajaxPost(data.action, $form.serialize(), data.refresh, responseText => {
+            console.log('responsetext', responseText);
+            $form.replaceWith(responseText);
+        });
 
         // Prevent regular form submission
         e.preventDefault();
@@ -34,29 +22,44 @@ $(($) => {
             return;
         }
 
-        $.post(data.actionUrl)
-            .done((response) => {
-                if ('' === response) {
-                    if (data.refresh) {
-                        ajaxRefresh(data.refresh);
+        ajaxPost(data.action, data.actionParams, data.refresh, responseText => {
+            $button.replaceWith(responseText);
+        });
+    });
+
+    function ajaxPost(action, data, refreshSelector, responseTextCallback) {
+        $.post('/index.php?action=' + encodeURIComponent(action), data)
+            .done((responseText) => {
+                if ('' === responseText) {
+                    if (refreshSelector) {
+                        ajaxRefresh(refreshSelector);
                     } else {
                         alert("Done but nothing to refresh");
                     }
                 } else {
-                    $button.replaceWith(xhr.responseText);
+                    responseTextCallback(responseText);
                 }
             })
             .fail(() => {
+                // Have failure callback?
                 alert("Sorry, the request broke");
             });
-    });
+    }
 
     function ajaxRefresh(selector) {
+
+        // Change technique, use regular ajax + replaceWith rather than 'load'?
+
         const $elements = $(selector);
         $elements.each(function () {
             // Note selector has to work in this context too
+            const elementAction = $(this).data('action');
+            if (!elementAction) {
+                console.error("No refresh URL", this);
+                return;
+            }
             $(this).load(
-                $(this).data('refresh-url') + ' ' + selector + ' > *',
+                '/index.php?action=' + encodeURIComponent(elementAction) + ' ' + selector + ' > *',
                 function (response, status, xhr) {
                     if ('error' === status) {
                         switch (xhr.status) {
