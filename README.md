@@ -6,6 +6,8 @@ This is an implementation of a trivial weblog app just to try out ideas about di
 
 ## Setup
 
+Use your own solution to compile `public/styles/main.scss` (sorry). Then...
+
     composer install # just for autoloading; we don't actually use any PHP libraries
     docker-compose up -d # schema.sql will be loaded automatically into 'db' container
     # now visit http://localhost:8080
